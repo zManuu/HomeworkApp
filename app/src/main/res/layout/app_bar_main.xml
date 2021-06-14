@@ -14,9 +14,10 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="50dp" app:layout_constraintBottom_toBottomOf="parent"
-    >
+            android:id="@+id/main_layout_scroll">
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:orientation="vertical" android:id="@+id/main_layout_list"/>
+                      android:orientation="vertical" android:id="@+id/main_layout_list">
+        </LinearLayout>
     </ScrollView>
     <include layout="@layout/content_main"
              android:layout_height="wrap_content"
@@ -99,15 +100,15 @@
     </LinearLayout>
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="250dp"
+            android:layout_height="105dp" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="325dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginRight="70dp" android:layout_marginEnd="70dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="70dp"
             android:layout_marginStart="70dp" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="305dp"
-            android:background="@drawable/rounded_button_2" android:id="@+id/exit_confirmation_div"
-            android:visibility="visible">
+            android:background="@drawable/rounded_button" android:id="@+id/exit_confirmation_div"
+            android:visibility="invisible">
         <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp"/>
@@ -116,7 +117,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/textView3"
                 android:textAlignment="center" android:gravity="center_horizontal"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark"/>
         <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp"/>
@@ -128,12 +131,14 @@
                     android:text="JA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/exit_yes" android:layout_weight="1"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp" android:textColor="@color/colorPrimaryDark"/>
             <Button
                     android:text="NEIN"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/exit_no" android:layout_weight="1"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp" android:layout_marginEnd="10dp"
+                    android:textColor="@color/colorPrimaryDark"/>
         </LinearLayout>
     </LinearLayout>
     <com.google.android.material.appbar.AppBarLayout

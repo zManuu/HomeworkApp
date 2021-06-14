@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -61,6 +62,8 @@ public class Application {
             HomeworkEntry entry = new HomeworkEntry("23.03.2021", "Test + '" + usedIDs + "'");
             homeworkList.getEntries().add(entry);
             addEntry(entry);
+            ScrollView s = mainActivity.findViewById(R.id.main_layout_scroll);
+            s.smoothScrollTo(0, mainActivity.findViewById(R.id.main_layout_list).getBottom());
         });
 
         // set action on delete-entry-button
@@ -110,6 +113,7 @@ public class Application {
         // set action on exit-no-button
         mainActivity.findViewById(R.id.exit_no).setOnClickListener(view -> {
             mainActivity.findViewById(R.id.exit_confirmation_div).setVisibility(View.INVISIBLE);
+            mainActivity.findViewById(R.id.entry_info_background).setVisibility(View.INVISIBLE);
         });
 
     }
@@ -136,7 +140,7 @@ public class Application {
         textField.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textField.setId(usedIDs);
         textField.setTextColor(Color.WHITE);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(900, 160);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 160);
         layoutParams.setMargins(0, 30, 0, 30);
         /*if (usedIDs == 50) { // the compared integer has to be the default (first) value of 'usedIDs'
             layoutParams.setMargins(0, 250, 0, 30);
@@ -187,9 +191,8 @@ public class Application {
     }
 
     public void showExitConfirmationUI() {
-        Log.e("TEST", "Aaaaaa");
         mainActivity.findViewById(R.id.exit_confirmation_div).setVisibility(View.VISIBLE);
-        Log.e("TEST", String.valueOf(mainActivity.findViewById(R.id.exit_confirmation_div).getVisibility()));
+        mainActivity.findViewById(R.id.entry_info_background).setVisibility(View.VISIBLE);
     }
 
 }
