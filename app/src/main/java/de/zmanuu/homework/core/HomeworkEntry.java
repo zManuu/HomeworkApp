@@ -20,4 +20,7 @@ public class HomeworkEntry {
     public void setTask(String task) {
         this.task = task;
     }
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

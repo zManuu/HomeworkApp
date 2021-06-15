@@ -3,8 +3,10 @@ package de.zmanuu.homework.core;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.inputmethodservice.Keyboard;
 import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -13,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import com.google.gson.Gson;
 import de.zmanuu.homework.MainActivity;
 import de.zmanuu.homework.R;
+import de.zmanuu.homework.util.KeyboardController;
 
 import java.util.*;
 
@@ -23,8 +26,8 @@ public class Application {
     private int usedIDs;
     private MainActivity mainActivity;
     private SharedPreferences preferences;
-    private Map<Button, HomeworkEntry> entryMap;
-    private Button lastUsed;
+    private Map<TextView, HomeworkEntry> entryMap;
+    private TextView lastUsed;
     private List<View> entryInfoViews;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -59,7 +62,7 @@ public class Application {
 
         // set action on add-entry-button
         mainActivity.findViewById(R.id.add_entry_btn).setOnClickListener(view -> {
-            HomeworkEntry entry = new HomeworkEntry("23.03.2021", "Test + '" + usedIDs + "'");
+            HomeworkEntry entry = new HomeworkEntry("23.03.2021", "Hausaufgabe");
             homeworkList.getEntries().add(entry);
             addEntry(entry);
             ScrollView s = mainActivity.findViewById(R.id.main_layout_scroll);
@@ -74,6 +77,7 @@ public class Application {
             entryMap.remove(lastUsed);
             layout.removeView(lastUsed);
             saveEntries();
+            KeyboardController.hideKeyboard(mainActivity, mainActivity.findViewById(R.id.entry_info_div_aufgabe)); // close keyboard
             entryInfoViews.forEach(v -> v.setVisibility(View.INVISIBLE));
 
             // make entries clickable
@@ -85,6 +89,7 @@ public class Application {
 
         // set action on back-button
         mainActivity.findViewById(R.id.back_btn).setOnClickListener(view -> {
+            KeyboardController.hideKeyboard(mainActivity, mainActivity.findViewById(R.id.entry_info_div_aufgabe)); // close keyboard
             entryInfoViews.forEach(v -> v.setVisibility(View.INVISIBLE)); // hide info-container
 
             // make entry-buttons clickable
@@ -95,13 +100,16 @@ public class Application {
             }
         });
 
-        // set action on apply-name-button
-        mainActivity.findViewById(R.id.apply_name_btn).setOnClickListener(view -> {
+        // set action on save-button
+        mainActivity.findViewById(R.id.save_btn).setOnClickListener(view -> {
             String newName = (((EditText) mainActivity.findViewById(R.id.entry_info_div_aufgabe)).getText().toString());
             HomeworkEntry editedEntry = entryMap.get(lastUsed);
             editedEntry.setTask(newName);
-            lastUsed.setText(editedEntry.getDate() + " | " + editedEntry.getTask());
+            lastUsed.setText(editedEntry.getTask());
+            String newDate = ((EditText) mainActivity.findViewById(R.id.entry_info_date)).getText().toString();
+            editedEntry.setDate(newDate);
             saveEntries();
+            KeyboardController.hideKeyboard(mainActivity, mainActivity.findViewById(R.id.entry_info_div_aufgabe)); // close keyboard
         });
 
         // set action on exit-yes-button
@@ -133,19 +141,25 @@ public class Application {
     private void addEntry(@NonNull final HomeworkEntry entry) {
         LinearLayout layout = mainActivity.findViewById(R.id.main_layout_list);
 
-        Button textField = new Button(mainActivity);
-        textField.setText(entry.getDate() + " | " + entry.getTask());
+        LinearLayout entryDiv = new LinearLayout(mainActivity);
+        entryDiv.setOrientation(LinearLayout.HORIZONTAL);
+        entryDiv.setBackgroundResource(R.drawable.rounded_button);
+        LinearLayout.LayoutParams entryDivLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160);
+        entryDivLayout.setMargins(0, 15, 0, 15);
+
+        TextView textField = new TextView(mainActivity);
+        textField.setText(entry.getTask());
         textField.setTextSize(15);
-        textField.setBackground(mainActivity.getResources().getDrawable(R.drawable.rounded_button));
-        textField.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textField.setId(usedIDs);
         textField.setTextColor(Color.WHITE);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 160);
-        layoutParams.setMargins(0, 30, 0, 30);
-        /*if (usedIDs == 50) { // the compared integer has to be the default (first) value of 'usedIDs'
-            layoutParams.setMargins(0, 250, 0, 30);
-        }*/
-        textField.setOnClickListener(view -> {
+        textField.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams textFieldLayout = new LinearLayout.LayoutParams(880, LinearLayout.LayoutParams.MATCH_PARENT);
+        entryDiv.addView(textField, textFieldLayout);
+
+        ImageButton infoButton = new ImageButton(mainActivity);
+        infoButton.setBackgroundResource(R.drawable.img_menu_edit);
+        infoButton.setForegroundGravity(Gravity.CENTER);
+        infoButton.setOnClickListener(view -> {
 
             // make entry buttons un-clickable
             for (int i = 0; i < layout.getChildCount(); i++) {
@@ -155,12 +169,21 @@ public class Application {
 
             // set texts of div to the texts of entry
             ((TextView) mainActivity.findViewById(R.id.entry_info_div_aufgabe)).setText(entry.getTask());
+            ((TextView) mainActivity.findViewById(R.id.entry_info_date)).setText(entry.getDate());
 
             entryInfoViews.forEach(v -> v.setVisibility(View.VISIBLE)); // show div
             lastUsed = textField; // set the lastUsed var to the entry button that was clicked
 
         });
-        layout.addView(textField, layoutParams);
+        LinearLayout.LayoutParams infoButtonLayout = new LinearLayout.LayoutParams(100, 100);
+        infoButtonLayout.setMargins(0, 30, 0, 30);
+        entryDiv.addView(infoButton, infoButtonLayout);
+
+        Space marginRight = new Space(mainActivity);
+        LinearLayout.LayoutParams marginRightLayout = new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.MATCH_PARENT);
+        entryDiv.addView(marginRight, marginRightLayout);
+
+        layout.addView(entryDiv, entryDivLayout);
 
         usedIDs++;
 
