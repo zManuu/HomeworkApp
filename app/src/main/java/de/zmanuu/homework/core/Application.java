@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import de.zmanuu.homework.MainActivity;
 import de.zmanuu.homework.R;
 import de.zmanuu.homework.util.KeyboardController;
+import de.zmanuu.homework.util.UnitConverter;
 
 import java.util.*;
 
@@ -144,8 +145,8 @@ public class Application {
         LinearLayout entryDiv = new LinearLayout(mainActivity);
         entryDiv.setOrientation(LinearLayout.HORIZONTAL);
         entryDiv.setBackgroundResource(R.drawable.rounded_button);
-        LinearLayout.LayoutParams entryDivLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 160);
-        entryDivLayout.setMargins(0, 15, 0, 15);
+        LinearLayout.LayoutParams entryDivLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, UnitConverter.convertPixelsToDpInt(160, mainActivity));
+        entryDivLayout.setMargins(0, UnitConverter.convertPixelsToDpInt(15, mainActivity), 0, UnitConverter.convertPixelsToDpInt(15, mainActivity));
 
         TextView textField = new TextView(mainActivity);
         textField.setText(entry.getTask());
@@ -153,7 +154,7 @@ public class Application {
         textField.setId(usedIDs);
         textField.setTextColor(Color.WHITE);
         textField.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams textFieldLayout = new LinearLayout.LayoutParams(880, LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams textFieldLayout = new LinearLayout.LayoutParams(UnitConverter.convertPixelsToDpInt(880, mainActivity), LinearLayout.LayoutParams.MATCH_PARENT);
         entryDiv.addView(textField, textFieldLayout);
 
         ImageButton infoButton = new ImageButton(mainActivity);
@@ -175,13 +176,9 @@ public class Application {
             lastUsed = textField; // set the lastUsed var to the entry button that was clicked
 
         });
-        LinearLayout.LayoutParams infoButtonLayout = new LinearLayout.LayoutParams(100, 100);
-        infoButtonLayout.setMargins(0, 30, 0, 30);
+        LinearLayout.LayoutParams infoButtonLayout = new LinearLayout.LayoutParams(UnitConverter.convertPixelsToDpInt(100, mainActivity), UnitConverter.convertPixelsToDpInt(100, mainActivity));
+        infoButtonLayout.setMargins(0, UnitConverter.convertPixelsToDpInt(30, mainActivity), 0, 30);
         entryDiv.addView(infoButton, infoButtonLayout);
-
-        Space marginRight = new Space(mainActivity);
-        LinearLayout.LayoutParams marginRightLayout = new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.MATCH_PARENT);
-        entryDiv.addView(marginRight, marginRightLayout);
 
         layout.addView(entryDiv, entryDivLayout);
 
